@@ -1,0 +1,258 @@
+﻿Version=5
+NumberOfModules=5
+Module1=Act2
+Module2=DBUtils
+Module3=SearchView
+Module4=act3
+Module5=CustomListView
+Build1=Default,com.com7dolphin.heritage
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+IconFile=
+NumberOfFiles=22
+File1=about.png
+File2=addfav.png
+File3=d.png
+File4=d1.png
+File5=d2.png
+File6=d3.png
+File7=d4.png
+File8=d5.png
+File9=fav.png
+File10=font.png
+File11=header1.png
+File12=heritage.db
+File13=home.png
+File14=icon.png
+File15=layErth.bal
+File16=layHome.bal
+File17=layMain.bal
+File18=menu.png
+File19=my.png
+File20=search.png
+File21=share.png
+File22=welcome.png
+NumberOfLibraries=9
+Library1=animation
+Library2=core
+Library3=sql
+Library4=webviewextras
+Library5=dialogs
+Library6=ime
+Library7=reflection
+Library8=stringutils
+Library9=phone
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: محاسبه ارث من (قانون ارث)
+	'remembre to set 'Package Name' into 'Project menu'!!!
+	#VersionCode: 2
+	#VersionName: 2.0
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: portrait
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: True
+	#IncludeTitle: False
+#End Region
+
+#Region  Module Attributes 
+'#IgnoreWarnings: 1, 2, 3, 4, 5, 6
+	'List of warnings that will be ignored in this module.
+'#ExcludeFromDebugger: False
+	'Whether to exclude this module from the debugger.
+	'Debug information will not be added to this module.
+	'Values: True or False
+'#ExcludeFromLibrary: False
+	'Whether to exclude this module during library compilation.
+	'Values: True or False
+#End Region
+
+Sub Process_Globals
+	Dim PageURL, pageTitle As String
+	Dim welcomeTimer As Timer	
+End Sub
+
+Sub Globals
+	Dim a1,a2,a3,a4,a5,thumb,thumbOut,thumbIn As Animation
+	Dim welcomePanel As Panel
+	Dim homePanel As Panel
+	Dim button1 As ImageView
+	Dim button2 As ImageView
+	Dim button3 As ImageView
+	Dim button4 As ImageView
+	Dim button5 As ImageView	
+	Dim Label2 As Label
+	Dim Label3 As Label
+	Dim Label4 As Label
+	Dim Label5 As Label
+	Private Label1 As Label
+	Private imgThumb As ImageView
+	Private imgDad As ImageView
+End Sub
+
+Sub SetTypeface(parent As Panel, t As Typeface)
+   For Each v As View In parent
+     If v Is Panel Then
+       SetTypeface(v, t)
+     Else If v Is Label Then
+         Dim lbl As Label = v
+         lbl.Typeface = t
+     End If
+   Next
+End Sub
+
+Sub Activity_Create (FirstTime As Boolean)
+	Activity.LoadLayout("layHome")
+	
+	Dim myFont As Typeface
+	myFont= Typeface.LoadFromAssets("BYekan.ttf")
+	SetTypeface(homePanel,myFont)
+	
+	showWelcome(2500)
+	'button animations:
+	a1.InitializeTranslate("a", 0, 0, 0, 4)
+	a1.RepeatMode = a1.REPEAT_REVERSE
+	a1.Duration = 200
+	a2.InitializeTranslate("a", 0, 0, 0, 4)
+	a2.RepeatMode = a2.REPEAT_REVERSE
+	a2.Duration = 200
+	a3.InitializeTranslate("a", 0, 0, 0, 4)
+	a3.RepeatMode = a3.REPEAT_REVERSE
+	a3.Duration = 200
+	a4.InitializeTranslate("a", 0, 0, 0, 4)
+	a4.RepeatMode = a4.REPEAT_REVERSE
+	a4.Duration = 200
+	a5.InitializeTranslate("a", 0, 0, 0, 4)
+	a5.RepeatMode = a5.REPEAT_REVERSE
+	a5.Duration = 200
+	thumb.InitializeTranslate("thumb", 0, 0, 0, -10)
+	thumb.RepeatMode = a5.REPEAT_REVERSE
+	thumb.Duration = 700
+	thumb.RepeatCount = 3
+	thumbOut.InitializeAlpha("thumbOut",1,0)
+	thumbOut.Duration = 700	
+	thumbIn.InitializeAlpha("thumbIn",0,1)
+	thumbIn.Duration = 700
+End Sub
+
+Sub showWelcome(duration As Int)
+	EnableAll(homePanel,False)
+	welcomeTimer.Initialize("welTimer",duration)
+	welcomeTimer.Enabled = True
+End Sub
+
+Sub welTimer_tick
+	welcomeTimer.Enabled = False
+	welcomePanel.Visible = False
+	homePanel.Visible = True
+	EnableAll(homePanel,True)
+	thumbIn.Start(imgThumb)
+	thumbIn.Start(imgDad)
+End Sub
+
+Sub thumbIn_AnimationEnd
+	thumb.Start(imgThumb)
+End Sub
+
+Sub thumb_AnimationEnd
+	thumbOut.Start(imgDad)
+	thumbOut.Start(imgThumb)
+End Sub
+
+Sub thumbOut_AnimationEnd
+	imgDad.Visible = False
+	imgThumb.Visible = False	
+End Sub
+
+Sub Activity_Resume
+	
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+	
+End Sub
+
+Sub EnableAll(p As Panel, Enabled As Boolean)
+   For Each v As View In p
+      If v Is Panel Then
+         EnableAll(v, Enabled)
+      Else
+         v.Enabled = Enabled
+      End If
+   Next
+End Sub
+
+Sub Activity_KeyPress (KeyCode As Int) As Boolean 'Return True to consume the event
+	If KeyCode = KeyCodes.KEYCODE_BACK Then
+		If Msgbox2("آیا میخواهید از برنامه خارج شوید؟", "توجه", "بلی", "", "خیر", Null) =DialogResponse.POSITIVE Then
+			Activity.finish					
+		Else
+			Return True
+		End If
+	End If	
+End Sub
+
+Sub button1_Click
+	a1.Start(button1)
+End Sub
+
+Sub button2_Click
+	a2.Start(button2)
+	a2.Start(Label2)
+End Sub
+
+Sub button3_Click
+	a3.Start(button3)
+	a3.Start(Label3)
+End Sub
+
+Sub button4_Click
+	a4.Start(button4)
+	a4.Start(Label4)
+End Sub
+
+Sub button5_Click
+	a5.Start(button5)
+	a5.Start(Label5)
+End Sub
+
+Sub a_AnimationEnd
+	If Sender = a1 Then		
+		pageTitle = "ارث من"
+		StartActivity(act3)
+	Else If Sender = a2 Then
+		PageURL = "/data/will.html#menu"
+		pageTitle = "وصیت من"
+		StartActivity(Act2)
+	Else If Sender = a3 Then
+		PageURL = "/data/maliat.html#menu"
+		pageTitle = "مالیات بر ارث"
+		StartActivity(Act2)
+	Else If Sender = a4 Then
+		PageURL = "/data/law.html#menu"
+		pageTitle = "قانون ارث"
+		StartActivity(Act2)
+	Else If Sender = a5 Then
+		PageURL = "/data/dict.html#menu"
+		pageTitle = "لغت نامه"
+		StartActivity(Act2)
+	End If
+End Sub
+
+Sub icon1_Click
+	' share clicked		
+		Dim share1 As Intent
+		share1.Initialize(share1.ACTION_SEND,"")
+		share1.SetType("text/plain")
+		share1.PutExtra("android.intent.extra.TEXT", "http://cafebazaar.ir/app/com.com7dolphin.heritage/")
+		share1.WrapAsIntentChooser("Share via")
+		StartActivity(share1)
+End Sub
+
+Sub icon2_Click
+	Dim p As PhoneIntents
+    StartActivity(p.OpenBrowser("http://www.7dolphin.com"))
+End Sub
+
